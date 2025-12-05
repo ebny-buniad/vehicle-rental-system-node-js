@@ -15,6 +15,7 @@ const createUser = async (payload: Record<string, unknown>) => {
     return result;       
 }
 
+
 export const userServices = {
     createUser
 }
