@@ -56,15 +56,35 @@ const getCustomerBookings = async (req: Request, res: Response) => {
     }
 }
 
-// Update bookings 
-const updateBookings = async (req: Request, res: Response) => {
+// Cancelled bookings 
+const cancelledBookings = async (req: Request, res: Response) => {
     const id = req.params.id;
     const status = req.body;
     try {
-        const result = await bookingsServices.updateBookings(id as string, status);
+        const result = await bookingsServices.cancelledBookings(id as string, status);
         res.status(200).json({
             success: true,
             message: "Booking cancelled successfully",
+            data: result
+        })
+    }
+    catch (err: any) {
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+    }
+}
+
+//  Returned bookings
+const returnedBookings = async (req: Request, res: Response) => {
+    const id = req.params.id;
+    const status = req.body;
+    try {
+        const result = await bookingsServices.returnedBookings(id as string, status);
+        res.status(200).json({
+            success: true,
+            message: "Booking marked as returned. Vehicle is now available",
             data: result
         })
     }
@@ -83,5 +103,6 @@ export const bookingsController = {
     createBookings,
     getAllBookings,
     getCustomerBookings,
-    updateBookings
+    cancelledBookings,
+    returnedBookings
 }

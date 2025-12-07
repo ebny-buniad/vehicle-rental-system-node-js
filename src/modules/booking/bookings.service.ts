@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { pool } from "../../config/db";
 import dateCount from "../../helper/DateCount";
 
-// Create bookings api
+// Create bookings
 const createBookings = async (payload: Record<string, unknown>) => {
     const { customer_id, vehicle_id, rent_start_date, rent_end_date } = payload;
     const vehicleInfo = await pool.query(`SELECT vehicle_name, daily_rent_price, availability_status FROM vehicles WHERE id=$1`, [vehicle_id]);
@@ -102,13 +102,18 @@ const getCustomerBookings = async (cid: string) => {
     return finalData;
 }
 
-// Update bookings 
-const updateBookings = async (id: string, payload: Record<string, unknown>) => {
+// Cancelled bookings 
+const cancelledBookings = async (id: string, payload: Record<string, unknown>) => {
     const { status } = payload;
     const bookingStatus = {
         status,
         statusUpdateDate: new Date()
     }
+
+    // if(status !== 'cancelled'){
+    //     throw new Error("Status sho");
+    // }
+
     const bookingInfo = await pool.query(`
         SELECT * FROM bookings WHERE id=$1
         `, [id]);
@@ -120,6 +125,30 @@ const updateBookings = async (id: string, payload: Record<string, unknown>) => {
     return updateStatus;
 }
 
+// Returned bookings
+
+const returnedBookings = async (id: string, payload: Record<string, unknown>) => {
+    const { status } = payload;
+    const bookingInfo = await pool.query(`
+        SELECT * FROM bookings WHERE id=$1
+        `, [id]);
+    const { vehicle_id } = bookingInfo.rows[0];
+    const vechileInfo = await pool.query(`
+        SELECT * FROM vehicles WHERE id=$1
+        `, [vehicle_id]);
+    const { availability_status } = vechileInfo.rows[0];
+
+    const updateBookingStatus = await pool.query(`UPDATE bookings SET status=$1 WHERE id=$2 RETURNING *`, [status, id]);
+    const updateBookingStatusRes = updateBookingStatus.rows[0];
+    const updateVehicleStatus = await pool.query(`UPDATE vehicles SET availability_status=$1 WHERE id=$2 RETURNING *`, ["available", vehicle_id]);
+
+    return {
+        ...updateBookingStatusRes,
+        vehicle: {
+            availability_status: availability_status
+        }
+    };
+}
 
 
 
@@ -128,6 +157,7 @@ export const bookingsServices = {
     createBookings,
     getAllBookings,
     getCustomerBookings,
-    updateBookings
+    cancelledBookings,
+    returnedBookings
 }
 
