@@ -17,7 +17,7 @@ app.use("/api/v1/auth", signupRoutes)
 app.use('/api/v1', vehicleRoutes);
 app.use('/api/v1', bookingsRoutes);
 
-// app.use("/api/v1", userRoutes)
+app.use("/api/v1", userRoutes);
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World!')

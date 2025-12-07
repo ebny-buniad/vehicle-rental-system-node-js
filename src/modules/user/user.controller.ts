@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { userServices } from "./user.service";
 
-const createUser = async (req: Request, res: Response) => {
+const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const result = await userServices.createUser(req.body)
+        const result = await userServices.getAllUsers()
         res.status(200).json({
             success: true,
-            message: 'Data inserted',
+            message: 'Users retrieved successfully',
             data: result.rows[0]
         });
     } catch (err: any) {
@@ -18,5 +18,5 @@ const createUser = async (req: Request, res: Response) => {
 }
 
 export const userControllers = {
-    createUser
+    getAllUsers
 }
