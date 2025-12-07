@@ -13,7 +13,6 @@ const auth = (...roles: string[]) => {
             }
             const decoded = jwt.verify(token, config.JWT_SECRET as string) as JwtPayload;
 
-            console.log({ decoded })
             req.user = decoded ;
 
             if(roles.length && !roles.includes(decoded.role as string)){
@@ -22,7 +21,7 @@ const auth = (...roles: string[]) => {
                 })
             }
 
-            next()
+            next();
         }
         catch (err: any) {
             res.status(500).json({
