@@ -5,6 +5,8 @@ import { signupRoutes } from "./modules/auth/signup/auth.signup.router";
 import { vehicleRoutes } from "./modules/vehicles/vehicle.routes";
 import { bookingsRoutes } from "./modules/booking/bookings.routes";
 import { signinRoutes } from "./modules/auth/signin/auth.signin.router";
+import "./schedulers/autoReturn"
+
 const app = express();
 const port = 5000;
 
