@@ -58,7 +58,7 @@ const getCustomerBookings = async (req: Request, res: Response) => {
 
 // Cancelled bookings 
 const cancelledBookings = async (req: Request, res: Response) => {
-    const id = req.params.id;
+    const id = req.params.bookingId;
     const status = req.body;
     try {
         const result = await bookingsServices.cancelledBookings(id as string, status);
@@ -78,7 +78,7 @@ const cancelledBookings = async (req: Request, res: Response) => {
 
 //  Returned bookings
 const returnedBookings = async (req: Request, res: Response) => {
-    const id = req.params.id;
+    const id = req.params.bookingId;
     const status = req.body;
     try {
         const result = await bookingsServices.returnedBookings(id as string, status);

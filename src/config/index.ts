@@ -6,7 +6,8 @@ dotenv.config({
 });
 
 const config = {
-    CONNECTION_STR: process.env.CONNECTION_STR
+    CONNECTION_STR: process.env.CONNECTION_STR,
+    JWT_SECRET: process.env.JWT_SECRET
 }
 
 export default config
